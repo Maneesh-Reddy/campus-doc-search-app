@@ -33,7 +33,8 @@ function App() {
 
   const filteredDoctors = doctors.filter(doctor => {
     const matchesSearch = doctor.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSpecialty = !selectedSpecialty || doctor.specialities?.some(s => s.name === selectedSpecialty);
+    const matchesSpecialty = selectedSpecialties.length === 0 || 
+      doctor.specialities?.some(s => selectedSpecialties.includes(s.name));
     const matchesConsultation = !consultationType || 
       (consultationType === 'Video' && doctor.video_consult) ||
       (consultationType === 'In-clinic' && doctor.in_clinic);
