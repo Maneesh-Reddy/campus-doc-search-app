@@ -13,15 +13,18 @@ const AutocompleteSearch = ({
   const searchRef = useRef(null);
 
   useEffect(() => {
-    if (searchQuery) {
-      const filtered = doctors
-        .filter((doctor) =>
-          doctor.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+    const getSuggestions = (query) => {
+      if (!query) return [];
+      const lowerQuery = query.toLowerCase();
+      return doctors
+        .filter(doctor => doctor.name.toLowerCase().includes(lowerQuery))
         .slice(0, 3);
-      
-      setSuggestions(filtered);
-      setShowSuggestions(filtered.length > 0);
+    };
+
+    if (searchQuery) {
+      const matches = getSuggestions(searchQuery);
+      setSuggestions(matches);
+      setShowSuggestions(matches.length > 0);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -39,15 +42,23 @@ const AutocompleteSearch = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setShowSuggestions(false);
-    }
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onSearchChange(value);
   };
 
   const handleSuggestionClick = (doctor) => {
     onSelectDoctor(doctor);
     setShowSuggestions(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (suggestions.length > 0) {
+        handleSuggestionClick(suggestions[0]);
+      }
+      setShowSuggestions(false);
+    }
   };
 
   return (
@@ -58,8 +69,8 @@ const AutocompleteSearch = ({
           type="text"
           placeholder="Search for doctors"
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          onKeyDown={handleSearchKeyDown}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           onFocus={() => setShowSuggestions(searchQuery.length > 0 && suggestions.length > 0)}
           className="w-full p-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
         />
@@ -81,7 +92,7 @@ const AutocompleteSearch = ({
                 <div>
                   <div className="font-semibold">{doctor.name}</div>
                   <div className="text-sm text-gray-500">
-                    {doctor.specialty.slice(0, 1).join(", ")}
+                    {doctor.specialty?.[0] || 'General Physician'}
                   </div>
                 </div>
               </li>
