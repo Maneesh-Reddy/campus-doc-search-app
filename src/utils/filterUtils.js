@@ -1,4 +1,3 @@
-
 export function getUniqueSpecialties(doctors) {
   const specialtiesSet = new Set();
   doctors.forEach((doctor) => {
@@ -51,3 +50,20 @@ export function parseQueryParams(search) {
     sortBy,
   };
 }
+
+export const filterDoctors = (doctors, filters) => {
+  return doctors.filter(doctor => {
+    if (filters.specialty && filters.specialty !== 'All' && 
+        !doctor.specialty.includes(filters.specialty)) {
+      return false;
+    }
+    if (filters.consultationType && filters.consultationType !== 'All' && 
+        doctor.consultationType !== filters.consultationType) {
+      return false;
+    }
+    if (filters.fees && doctor.fees > parseInt(filters.fees)) {
+      return false;
+    }
+    return true;
+  });
+};
