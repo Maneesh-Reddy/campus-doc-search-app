@@ -13,6 +13,7 @@ const SPECIALTIES = [
 function App() {
   const [doctors, setDoctors] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSpecialties, setSelectedSpecialties] = useState([]); // Added state for selected specialties
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [consultationType, setConsultationType] = useState('');
   const [sortBy, setSortBy] = useState('');
@@ -75,8 +76,13 @@ function App() {
               <label key={specialty}>
                 <input
                   type="checkbox"
-                  checked={selectedSpecialty === specialty}
-                  onChange={() => setSelectedSpecialty(selectedSpecialty === specialty ? '' : specialty)}
+                  checked={selectedSpecialties.includes(specialty)}
+                  onChange={() => {
+                    const newSpecialties = selectedSpecialties.includes(specialty)
+                      ? selectedSpecialties.filter(s => s !== specialty)
+                      : [...selectedSpecialties, specialty];
+                    setSelectedSpecialties(newSpecialties);
+                  }}
                   data-testid={`filter-specialty-${specialty.replace(' ', '-')}`}
                 />
                 {specialty}
