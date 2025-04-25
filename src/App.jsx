@@ -1,6 +1,14 @@
-
 import { useState, useEffect } from 'react';
 import './App.css';
+
+const SPECIALTIES = [
+  "General Physician", "Dentist", "Dermatologist", "Paediatrician",
+  "Gynaecologist", "ENT", "Diabetologist", "Cardiologist",
+  "Physiotherapist", "Endocrinologist", "Orthopaedic", "Ophthalmologist",
+  "Gastroenterologist", "Pulmonologist", "Psychiatrist", "Urologist",
+  "Dietitian/Nutritionist", "Psychologist", "Sexologist", "Nephrologist",
+  "Neurologist", "Oncologist", "Ayurveda", "Homeopath"
+];
 
 function App() {
   const [doctors, setDoctors] = useState([]);
@@ -29,7 +37,7 @@ function App() {
     const matchesConsultation = !consultationType || 
       (consultationType === 'Video' && doctor.video_consult) ||
       (consultationType === 'In-clinic' && doctor.in_clinic);
-    
+
     return matchesSearch && matchesSpecialty && matchesConsultation;
   });
 
@@ -62,7 +70,7 @@ function App() {
         <aside className="filters">
           <h3 data-testid="filter-header-speciality">Specialties</h3>
           <div className="filter-group">
-            {['General Physician', 'Dentist', 'Dermatologist'].map(specialty => (
+            {SPECIALTIES.map(specialty => (
               <label key={specialty}>
                 <input
                   type="checkbox"
