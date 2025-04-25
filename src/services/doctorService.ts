@@ -1,3 +1,4 @@
+import * as React from "react"
 
 interface Doctor {
   id: string;
@@ -9,6 +10,7 @@ interface Doctor {
   qualification: string;
   location: string;
   clinic: string;
+  profileImage?: string; // New optional field
 }
 
 class DoctorService {
@@ -71,6 +73,10 @@ class DoctorService {
           consultationType = "Video";
         }
 
+        // Add profile image logic
+        const profileImage = item.profile_image || 
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=random`;
+
         return {
           id: item.id || "",
           name: item.name || "",
@@ -80,7 +86,8 @@ class DoctorService {
           consultationType: consultationType,
           qualification: item.doctor_introduction || "",
           location: item.clinic && item.clinic.address ? item.clinic.address.locality : "",
-          clinic: item.clinic ? item.clinic.name : ""
+          clinic: item.clinic ? item.clinic.name : "",
+          profileImage: profileImage
         };
       });
       

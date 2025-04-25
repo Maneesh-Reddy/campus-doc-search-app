@@ -1,6 +1,8 @@
 
 import React from "react";
 import type { Doctor } from "../services/doctorService";
+import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar";
+import { User } from "lucide-react";
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -10,11 +12,16 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
   return (
     <div data-testid="doctor-card" className="bg-white rounded-lg shadow p-4 mb-4 flex flex-col md:flex-row md:items-start gap-4">
       <div className="flex-shrink-0">
-        <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-          <span className="text-2xl font-bold text-gray-500">
-            {doctor.name.charAt(0)}
-          </span>
-        </div>
+        <Avatar className="w-20 h-20">
+          <AvatarImage 
+            src={doctor.profileImage} 
+            alt={`${doctor.name}'s profile`} 
+            className="object-cover"
+          />
+          <AvatarFallback>
+            <User className="w-10 h-10 text-gray-500" />
+          </AvatarFallback>
+        </Avatar>
       </div>
       
       <div className="flex-grow">
