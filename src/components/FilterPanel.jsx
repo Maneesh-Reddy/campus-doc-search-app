@@ -24,20 +24,22 @@ const FilterPanel = ({
       
       <div className="mb-6">
         <h3 className="font-medium mb-2" data-testid="filter-header-speciality">Specialties</h3>
-        {SPECIALTIES.map((specialty) => (
-          <div key={specialty} className="mb-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={selectedSpecialties.includes(specialty)}
-                onChange={() => onSpecialtyChange(specialty)}
-                data-testid={`filter-specialty-${specialty.replace('/', '-')}`}
-                className="mr-2"
-              />
-              {specialty}
-            </label>
-          </div>
-        ))}
+        <div className="max-h-96 overflow-y-auto">
+          {SPECIALTIES.map((specialty) => (
+            <div key={specialty} className="mb-2">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedSpecialties.includes(specialty)}
+                  onChange={() => onSpecialtyChange(specialty)}
+                  data-testid={`filter-specialty-${specialty.replace(/[^a-zA-Z0-9]/g, '-')}`}
+                  className="mr-2"
+                />
+                {specialty}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mb-6">
@@ -69,7 +71,7 @@ const FilterPanel = ({
       </div>
 
       <div>
-        <h3 className="font-medium mb-2" data-testid="filter-header-sort">Sort By</h3>
+        <h3 className="font-medium mb-2">Sort By</h3>
         <div className="mb-2">
           <label className="flex items-center">
             <input
