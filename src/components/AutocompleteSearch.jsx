@@ -1,12 +1,11 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
 
-const AutocompleteSearch = ({
-  doctors,
-  searchQuery,
-  onSearchChange,
-  onSelectDoctor,
+const AutocompleteSearch = ({ 
+  doctors, 
+  searchQuery, 
+  onSearchChange, 
+  onSelectDoctor 
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -21,14 +20,9 @@ const AutocompleteSearch = ({
         .slice(0, 3);
     };
 
-    if (searchQuery) {
-      const matches = getSuggestions(searchQuery);
-      setSuggestions(matches);
-      setShowSuggestions(matches.length > 0);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
+    const matches = getSuggestions(searchQuery);
+    setSuggestions(matches);
+    setShowSuggestions(matches.length > 0);
   }, [searchQuery, doctors]);
 
   useEffect(() => {
@@ -43,8 +37,7 @@ const AutocompleteSearch = ({
   }, []);
 
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    onSearchChange(value);
+    onSearchChange(e.target.value);
   };
 
   const handleSuggestionClick = (doctor) => {
@@ -53,11 +46,8 @@ const AutocompleteSearch = ({
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      if (suggestions.length > 0) {
-        handleSuggestionClick(suggestions[0]);
-      }
-      setShowSuggestions(false);
+    if (e.key === 'Enter' && suggestions.length > 0) {
+      handleSuggestionClick(suggestions[0]);
     }
   };
 
@@ -72,28 +62,26 @@ const AutocompleteSearch = ({
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setShowSuggestions(searchQuery.length > 0 && suggestions.length > 0)}
-          className="w-full p-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+          className="w-full p-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-          <Search className="h-5 w-5 text-gray-500" />
+          <Search className="h-5 w-5 text-gray-400" />
         </div>
       </div>
 
       {showSuggestions && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-          <ul className="max-h-60 overflow-auto">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+          <ul className="py-1">
             {suggestions.map((doctor) => (
               <li
                 key={doctor.id}
                 data-testid="suggestion-item"
-                className="p-3 hover:bg-gray-100 cursor-pointer flex items-center border-b last:border-b-0"
                 onClick={() => handleSuggestionClick(doctor)}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               >
-                <div>
-                  <div className="font-semibold">{doctor.name}</div>
-                  <div className="text-sm text-gray-500">
-                    {doctor.specialty?.[0] || 'General Physician'}
-                  </div>
+                <div className="font-medium">{doctor.name}</div>
+                <div className="text-sm text-gray-500">
+                  {doctor.specialities?.[0]?.name || 'General Physician'}
                 </div>
               </li>
             ))}
