@@ -71,7 +71,7 @@ const AutocompleteSearch = ({
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setShowSuggestions(searchQuery.length > 0 && suggestions.length > 0)}
-          className="w-full p-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 text-gray-900"
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           <Search className="h-5 w-5 text-gray-400" />
@@ -80,16 +80,16 @@ const AutocompleteSearch = ({
 
       {showSuggestions && (
         <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
-          <ul className="py-1">
+          <ul className="py-1 divide-y divide-gray-100">
             {suggestions.map((doctor) => (
               <li
                 key={doctor.id}
                 data-testid="suggestion-item"
                 onClick={() => handleSuggestionClick(doctor)}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
               >
-                <div className="font-medium">{doctor.name}</div>
-                <div className="text-sm text-gray-500">
+                <div className="text-gray-900 font-medium">{doctor.name}</div>
+                <div className="text-sm text-gray-500 mt-0.5">
                   {doctor.specialities?.[0]?.name || 'General Physician'}
                 </div>
               </li>
