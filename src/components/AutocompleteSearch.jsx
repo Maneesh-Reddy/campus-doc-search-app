@@ -15,14 +15,23 @@ const AutocompleteSearch = ({
     const getSuggestions = (query) => {
       if (!query) return [];
       const lowerQuery = query.toLowerCase();
+      // Sort matches by how closely they match the query
       return doctors
         .filter(doctor => doctor.name.toLowerCase().includes(lowerQuery))
+        .sort((a, b) => {
+          const aIndex = a.name.toLowerCase().indexOf(lowerQuery);
+          const bIndex = b.name.toLowerCase().indexOf(lowerQuery);
+          if (aIndex === bIndex) {
+            return a.name.length - b.name.length; // Shorter names first if match position is same
+          }
+          return aIndex - bIndex; // Earlier matches first
+        })
         .slice(0, 3);
     };
 
     const matches = getSuggestions(searchQuery);
     setSuggestions(matches);
-    setShowSuggestions(matches.length > 0);
+    setShowSuggestions(searchQuery.length > 0 && matches.length > 0);
   }, [searchQuery, doctors]);
 
   useEffect(() => {
