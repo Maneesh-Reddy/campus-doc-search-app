@@ -10,7 +10,7 @@ interface Doctor {
   qualification: string;
   location: string;
   clinic: string;
-  profileImage?: string; // New optional field
+  profileImage?: string;
 }
 
 class DoctorService {
@@ -46,26 +46,21 @@ class DoctorService {
       
       const data = await response.json();
       
-      // Transform the API response to match our Doctor interface
       this.doctors = data.map((item: any) => {
-        // Extract specialty names from the specialities array
         const specialties = item.specialities ? 
           item.specialities.map((s: any) => s.name) : 
           [];
         
-        // Extract experience years from string (e.g., "15 Years of experience")
         const experienceMatch = item.experience ? 
           item.experience.match(/(\d+)/) : 
           null;
         const experienceYears = experienceMatch ? parseInt(experienceMatch[1], 10) : 0;
         
-        // Extract fee amount (e.g., "₹ 600")
         const feesMatch = item.fees ? 
           item.fees.match(/₹\s*(\d+)/) : 
           null;
         const feesAmount = feesMatch ? parseInt(feesMatch[1], 10) : 0;
         
-        // Determine consultation type
         let consultationType: "Video" | "In-clinic" | "Both" = "In-clinic";
         if (item.video_consult && item.in_clinic) {
           consultationType = "Both";
@@ -73,8 +68,7 @@ class DoctorService {
           consultationType = "Video";
         }
 
-        // Add profile image logic
-        const profileImage = item.profile_image || 
+        const profileImage = item.photo || 
           `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=random`;
 
         return {
